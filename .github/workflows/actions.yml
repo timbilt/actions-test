@@ -8,6 +8,23 @@ on:
   #   - cron: '1 * * 1 0'
   repository_dispatch: #manual
     types: [custom_event_type]
+  push:
+    branches:
+      - master
+      - 'feature/*' # catches feature/a and feature/b but not feature/a/b
+      - 'feature/**' # catches feature/a and feature/b and feature/a/b
+      - '!feature/featC'
+    # branches-ignore:
+    #   - 'test/**'
+    tags:
+      - v1.*
+    # tags-ignore:
+    #   - v2.*
+    paths:
+      - '**.js'
+      - '!filename.js'
+    # paths-ignore:
+    #   - 'docs/**'
 jobs:
   run-github-actions:
     runs-on: ubuntu-latest
