@@ -1,24 +1,36 @@
 name: Context testing
-on: push
+on:
+  - push
+  - pull_request
 
 jobs:
   dump_contexts_to_log:
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' # automatically treated as expression but can use ${{ ... }}
     steps:
+      - name: Some failing step
+        run: eccho Does not exist
       - name: Dump GitHub context
+        if: failure()
         id: github_context_step
         run: echo '${{ toJSON(github) }}'
       - name: Dump job context
+        if: always()
         run: echo '${{ toJSON(job) }}'
       - name: Dump steps context
+        if: always()
         run: echo '${{ toJSON(steps) }}'
       - name: Dump runner context
+        if: always()
         run: echo '${{ toJSON(runner) }}'
       - name: Dump strategy context
+        if: always()
         run: echo '${{ toJSON(strategy) }}'
       - name: Dump matrix context
+        if: always()
         run: echo '${{ toJSON(matrix) }}'
       - name: Dump functions
+        if: always()
         run: |
           echo ${{ contains('hello', 'll') }}
           echo ${{ startsWith('hello', 'he') }}
